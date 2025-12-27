@@ -19,3 +19,9 @@ body {
 a {
   color: inherit;
 }
+
+.glass-morphism {
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.7));
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}

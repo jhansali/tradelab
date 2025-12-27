@@ -1,161 +1,238 @@
-import Link from "next/link";
+'use client';
 
-async function getHealthStatus(): Promise<string> {
-  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000";
-  try {
-    const response = await fetch(`${baseUrl}/health`, { cache: "no-store" });
-    if (!response.ok) {
-      return "unreachable";
-    }
-    const data = await response.json();
-    return data.status ?? "unknown";
-  } catch (error) {
-    console.error("Health check failed", error);
-    return "unreachable";
-  }
-}
+import AIAnalyzer from "./components/marketing/AIAnalyzer";
+import FAQ from "./components/marketing/FAQ";
+import Features from "./components/marketing/Features";
+import HowItWorks from "./components/marketing/HowItWorks";
+import MarketPreview from "./components/marketing/MarketPreview";
+import Navbar from "./components/marketing/Navbar";
 
-export default async function Home() {
-  const healthStatus = await getHealthStatus();
-
+export default function Home() {
   return (
-    <main className="min-h-screen bg-slate-950 text-slate-100">
-      <div className="mx-auto max-w-6xl px-6 py-16 space-y-24">
-        <section className="grid gap-12 md:grid-cols-2 items-center">
-          <div className="space-y-6">
-            <p className="text-sm font-semibold text-cyan-400">TradeLab</p>
-            <h1 className="text-4xl md:text-5xl font-bold leading-tight">
-              Build, test, and launch trading ideas faster.
-            </h1>
-            <p className="text-lg text-slate-300">
-              A modern toolkit combining research, execution, and monitoring into a single workflow.
+    <main className="min-h-screen bg-slate-950 text-slate-50 selection:bg-indigo-500/30">
+      <Navbar />
+
+      <header className="relative pt-32 pb-24 lg:pt-48 overflow-hidden">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-full -z-10">
+          <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-600/20 blur-[120px] rounded-full" />
+          <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-600/10 blur-[120px] rounded-full" />
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-xs font-bold uppercase tracking-widest mb-8">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
+            </span>
+            Real-time Virtual Trading
+          </div>
+
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-white mb-8 tracking-tight leading-[1.1]">
+            Practice trading with <br />
+            <span className="bg-gradient-to-r from-indigo-400 via-blue-400 to-indigo-400 bg-clip-text text-transparent">
+              real market data.
+            </span>
+          </h1>
+
+          <p className="text-lg md:text-xl text-slate-400 max-w-3xl mx-auto mb-12 leading-relaxed">
+            TradeLab gives you $100,000 in virtual capital to test your theories. No risk, no deposits. Just
+            institutional-grade paper trading and strategy backtesting.
+          </p>
+
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-24">
+            <a
+              href="/signup"
+              className="w-full sm:w-auto px-10 py-5 bg-white text-slate-950 font-bold rounded-lg hover:bg-slate-100 transition-all text-lg shadow-2xl shadow-white/5"
+            >
+              Start Paper Trading
+            </a>
+            <a
+              href="/strategy-lab"
+              className="w-full sm:w-auto px-10 py-5 bg-slate-900 text-white font-bold rounded-lg border border-slate-800 hover:bg-slate-800 transition-all text-lg"
+            >
+              Explore Strategy Lab
+            </a>
+          </div>
+
+          <div className="text-slate-500 mb-12 uppercase text-xs font-bold tracking-[0.2em]">Trusted by Builders from</div>
+          <div className="flex flex-wrap justify-center gap-8 md:gap-16 opacity-40 grayscale filter invert brightness-200">
+            <div className="text-2xl font-black italic">TECHFLOW</div>
+            <div className="text-2xl font-black italic">QUANTSYS</div>
+            <div className="text-2xl font-black italic">BLOCKLAB</div>
+            <div className="text-2xl font-black italic">UPTICK</div>
+          </div>
+        </div>
+
+        <div className="max-w-6xl mx-auto px-4 mt-24">
+          <div className="relative group">
+            <div className="absolute inset-0 bg-indigo-600/10 blur-[100px] -z-10 group-hover:bg-indigo-600/20 transition-all" />
+            <MarketPreview />
+          </div>
+        </div>
+      </header>
+
+      <section className="border-y border-slate-800/50 bg-slate-900/20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="text-center p-6 border-r border-slate-800/50 last:border-0">
+              <div className="text-indigo-400 mb-2">
+                <svg className="w-6 h-6 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <h4 className="text-xl font-bold text-white mb-1">Delayed real market data</h4>
+              <p className="text-slate-500 text-sm">Educational 15m delay</p>
+            </div>
+            <div className="text-center p-6 border-r border-slate-800/50 last:border-0">
+              <div className="text-indigo-400 mb-2">
+                <svg className="w-6 h-6 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+              </div>
+              <h4 className="text-xl font-bold text-white mb-1">Backtests in minutes</h4>
+              <p className="text-slate-500 text-sm">High-speed replay engine</p>
+            </div>
+            <div className="text-center p-6 border-r border-slate-800/50 last:border-0">
+              <div className="text-indigo-400 mb-2">
+                <svg className="w-6 h-6 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                  />
+                </svg>
+              </div>
+              <h4 className="text-xl font-bold text-white mb-1">Real-time updates</h4>
+              <p className="text-slate-500 text-sm">WebSocket live push</p>
+            </div>
+            <div className="text-center p-6">
+              <div className="text-indigo-400 mb-2">
+                <svg className="w-6 h-6 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+                </svg>
+              </div>
+              <h4 className="text-xl font-bold text-white mb-1">Replay any range</h4>
+              <p className="text-slate-500 text-sm">20+ years of history</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <Features />
+
+      <section className="py-24 bg-slate-900/30">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="mb-12 text-center">
+            <h2 className="text-3xl font-bold mb-4">Integrated AI Lab</h2>
+            <p className="text-slate-400">Leverage AI-style sentiment to analyze tickers before you trade.</p>
+          </div>
+          <AIAnalyzer />
+        </div>
+      </section>
+
+      <HowItWorks />
+      <FAQ />
+
+      <section className="py-24 px-4 bg-indigo-600 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 blur-[100px] rounded-full -translate-y-1/2 translate-x-1/2" />
+        <div className="max-w-4xl mx-auto text-center relative z-10">
+          <h2 className="text-4xl md:text-6xl font-black text-white mb-8">Ready to test your edge?</h2>
+          <p className="text-xl text-indigo-100 mb-12">Join thousands of traders building their future in the markets today.</p>
+          <a
+            href="/signup"
+            className="px-12 py-6 bg-white text-indigo-600 font-bold rounded-xl text-xl hover:shadow-2xl transition-all inline-block"
+          >
+            Open Virtual Account
+          </a>
+        </div>
+      </section>
+
+      <footer className="py-20 border-t border-slate-900 px-4 sm:px-6 lg:px-8 bg-slate-950">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+            <div className="col-span-1 md:col-span-2">
+              <div className="flex items-center gap-2 mb-6">
+                <div className="w-8 h-8 bg-indigo-600 rounded flex items-center justify-center">
+                  <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                  </svg>
+                </div>
+                <span className="text-xl font-bold tracking-tight text-white">TradeLab</span>
+              </div>
+              <p className="text-slate-500 max-w-sm">
+                The world's most advanced paper trading environment. Built for those who take the market seriously.
+              </p>
+            </div>
+            <div>
+              <h4 className="text-white font-bold mb-6">Platform</h4>
+              <ul className="space-y-4 text-slate-500 text-sm">
+                <li>
+                  <a href="#" className="hover:text-white transition-colors">
+                    Features
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-white transition-colors">
+                    Strategy Lab
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-white transition-colors">
+                    Backtesting
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-white transition-colors">
+                    Live Markets
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="text-white font-bold mb-6">Support</h4>
+              <ul className="space-y-4 text-slate-500 text-sm">
+                <li>
+                  <a href="#" className="hover:text-white transition-colors">
+                    Help Center
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-white transition-colors">
+                    API Docs
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-white transition-colors">
+                    Community
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-white transition-colors">
+                    Contact
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div className="flex flex-col md:flex-row justify-between items-center pt-8 border-t border-slate-900 gap-6">
+            <div className="flex gap-8 text-slate-500 text-xs font-medium uppercase tracking-wider">
+              <a href="#" className="hover:text-white transition-colors">
+                Privacy Policy
+              </a>
+              <a href="#" className="hover:text-white transition-colors">
+                Terms of Service
+              </a>
+              <a href="#" className="hover:text-white transition-colors">
+                Risk Disclosure
+              </a>
+            </div>
+            <p className="text-slate-600 text-xs">
+              © 2024 TradeLab. For educational purposes only. Market data provided by delayed feed.
             </p>
-            <div className="flex gap-4">
-              <Link
-                href="/signup"
-                className="rounded-md bg-cyan-500 px-5 py-3 font-semibold text-slate-900 shadow-lg shadow-cyan-500/30 transition hover:translate-y-0.5 hover:bg-cyan-400"
-              >
-                Get started
-              </Link>
-              <Link
-                href="/signin"
-                className="rounded-md border border-slate-700 px-5 py-3 font-semibold text-slate-100 transition hover:border-cyan-400 hover:text-cyan-200"
-              >
-                Sign in
-              </Link>
-            </div>
-            <div className="flex items-center gap-2 text-sm text-slate-400">
-              <span className="inline-flex h-2 w-2 rounded-full bg-green-400" />
-              <span>API health: {healthStatus}</span>
-            </div>
           </div>
-          <div className="relative overflow-hidden rounded-2xl border border-slate-800 bg-gradient-to-br from-slate-900 via-slate-950 to-slate-900 p-8 shadow-2xl">
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(14,165,233,0.12),transparent_40%),radial-gradient(circle_at_80%_0,rgba(16,185,129,0.12),transparent_35%)]" />
-            <div className="relative space-y-4">
-              <div className="flex items-center justify-between">
-                <span className="text-sm uppercase tracking-[0.2em] text-slate-500">Dashboard</span>
-                <span className="rounded-full bg-slate-800 px-3 py-1 text-xs text-slate-300">Live</span>
-              </div>
-              <div className="grid gap-3 sm:grid-cols-3 text-slate-200">
-                <div className="rounded-lg border border-slate-800 bg-slate-900/60 p-4">
-                  <p className="text-xs text-slate-500">Throughput</p>
-                  <p className="mt-2 text-2xl font-semibold">142ms</p>
-                </div>
-                <div className="rounded-lg border border-slate-800 bg-slate-900/60 p-4">
-                  <p className="text-xs text-slate-500">Signals</p>
-                  <p className="mt-2 text-2xl font-semibold">27</p>
-                </div>
-                <div className="rounded-lg border border-slate-800 bg-slate-900/60 p-4">
-                  <p className="text-xs text-slate-500">Win Rate</p>
-                  <p className="mt-2 text-2xl font-semibold">63%</p>
-                </div>
-              </div>
-              <div className="rounded-xl border border-slate-800 bg-slate-900/70 p-5 text-sm leading-relaxed text-slate-200">
-                Orchestrate your strategy from research to live trading with audit-ready execution logs.
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="space-y-6">
-          <h2 className="text-2xl font-semibold">Why traders choose TradeLab</h2>
-          <div className="grid gap-6 md:grid-cols-3">
-            {["Async FastAPI backend", "Next.js experience", "Production ready ops"].map((title, index) => (
-              <div
-                key={title}
-                className="rounded-xl border border-slate-800 bg-slate-900/70 p-6 shadow-lg shadow-black/20"
-              >
-                <h3 className="text-lg font-semibold text-cyan-100">{title}</h3>
-                <p className="mt-3 text-sm text-slate-300">
-                  {[
-                    "Scale-ready API with async SQLAlchemy, Alembic migrations, and Postgres.",
-                    "Modern app router UI with Tailwind styling and fast DX.",
-                    "Docker-first setup with health checks and easy local orchestration.",
-                  ][index]}
-                </p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <section className="space-y-6">
-          <h2 className="text-2xl font-semibold">How it works</h2>
-          <div className="grid gap-4 sm:grid-cols-3">
-            {[
-              { step: "1", title: "Connect", body: "Run docker compose to bring up API, UI, and Postgres." },
-              { step: "2", title: "Create", body: "Design strategies, backtest, and set risk controls." },
-              { step: "3", title: "Ship", body: "Deploy and monitor live trades with instant insights." },
-            ].map((item) => (
-              <div key={item.step} className="rounded-xl border border-slate-800 bg-slate-900/60 p-5">
-                <div className="flex items-center gap-3">
-                  <span className="flex h-10 w-10 items-center justify-center rounded-full bg-cyan-500/20 text-cyan-200 font-semibold">
-                    {item.step}
-                  </span>
-                  <h3 className="text-lg font-semibold">{item.title}</h3>
-                </div>
-                <p className="mt-3 text-sm text-slate-300">{item.body}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <section className="space-y-6">
-          <h2 className="text-2xl font-semibold">FAQ</h2>
-          <div className="space-y-4">
-            {[
-              {
-                q: "Is the API really ready to run?",
-                a: "Yes. Environment variables are baked in and migrations run on startup.",
-              },
-              {
-                q: "Can I point this at my cloud Postgres?",
-                a: "Update DATABASE_URL and rebuild. The async engine and Alembic will follow.",
-              },
-              {
-                q: "How do I start building UI?",
-                a: "Use the App Router with Tailwind components. Extend the landing page or add routes under /app.",
-              },
-            ].map((item) => (
-              <div key={item.q} className="rounded-lg border border-slate-800 bg-slate-900/50 p-4">
-                <p className="font-semibold text-cyan-100">{item.q}</p>
-                <p className="mt-2 text-sm text-slate-300">{item.a}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <footer className="flex flex-col gap-3 border-t border-slate-800 pt-6 text-sm text-slate-400 md:flex-row md:items-center md:justify-between">
-          <span>TradeLab • Ship ideas confidently.</span>
-          <div className="flex gap-4">
-            <Link href="/signin" className="hover:text-cyan-200">
-              Sign in
-            </Link>
-            <Link href="/signup" className="hover:text-cyan-200">
-              Create account
-            </Link>
-          </div>
-        </footer>
-      </div>
+        </div>
+      </footer>
     </main>
   );
 }
