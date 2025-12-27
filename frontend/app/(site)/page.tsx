@@ -1,11 +1,13 @@
 'use client';
 
-import AIAnalyzer from "./components/marketing/AIAnalyzer";
-import FAQ from "./components/marketing/FAQ";
-import Features from "./components/marketing/Features";
-import HowItWorks from "./components/marketing/HowItWorks";
-import MarketPreview from "./components/marketing/MarketPreview";
-import Navbar from "./components/marketing/Navbar";
+import Link from "next/link";
+
+import AIAnalyzer from "./components/AIAnalyzer";
+import FAQ from "./components/FAQ";
+import Features from "./components/Features";
+import HowItWorks from "./components/HowItWorks";
+import MarketPreview from "./components/MarketPreview";
+import Navbar from "./components/Navbar";
 
 export default function Home() {
   return (
@@ -40,18 +42,18 @@ export default function Home() {
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-24">
-            <a
+            <Link
               href="/signup"
               className="w-full sm:w-auto px-10 py-5 bg-white text-slate-950 font-bold rounded-lg hover:bg-slate-100 transition-all text-lg shadow-2xl shadow-white/5"
             >
               Start Paper Trading
-            </a>
-            <a
-              href="/strategy-lab"
+            </Link>
+            <Link
+              href="/signup"
               className="w-full sm:w-auto px-10 py-5 bg-slate-900 text-white font-bold rounded-lg border border-slate-800 hover:bg-slate-800 transition-all text-lg"
             >
               Explore Strategy Lab
-            </a>
+            </Link>
           </div>
 
           <div className="text-slate-500 mb-12 uppercase text-xs font-bold tracking-[0.2em]">Trusted by Builders from</div>
@@ -139,12 +141,12 @@ export default function Home() {
         <div className="max-w-4xl mx-auto text-center relative z-10">
           <h2 className="text-4xl md:text-6xl font-black text-white mb-8">Ready to test your edge?</h2>
           <p className="text-xl text-indigo-100 mb-12">Join thousands of traders building their future in the markets today.</p>
-          <a
+          <Link
             href="/signup"
             className="px-12 py-6 bg-white text-indigo-600 font-bold rounded-xl text-xl hover:shadow-2xl transition-all inline-block"
           >
             Open Virtual Account
-          </a>
+          </Link>
         </div>
       </section>
 
