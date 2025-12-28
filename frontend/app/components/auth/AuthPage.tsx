@@ -1,9 +1,11 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
-export type AuthMode = "signin" | "signup";
+import { signin, signup } from "../../lib/api";
+import type { AuthMode } from "./types";
+import { loadUser, storeUser } from "./storage";
 
 interface AuthPageProps {
   initialMode?: AuthMode;
@@ -16,19 +18,46 @@ const AuthPage = ({ initialMode = "signin" }: AuthPageProps) => {
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
 
   const title = useMemo(() => (mode === "signin" ? "Welcome Back" : "Join TradeLab"), [mode]);
   const subtitle = mode === "signin"
     ? "Enter your credentials to access your virtual lab."
     : "Create your virtual account and start trading risk-free.";
 
+  // If already signed in, go straight to dashboard.
+  useEffect(() => {
+    const existing = loadUser();
+    if (existing) router.replace("/dashboard");
+  }, [router]);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const trimmedEmail = email.trim().toLowerCase();
+    if (password.length < 8) {
+      setError("Password must be at least 8 characters long");
+      return;
+    }
+    if (new TextEncoder().encode(password).length > 72) {
+      setError("Password must be 72 bytes or fewer");
+      return;
+    }
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      alert(`${mode === "signin" ? "Signed in" : "Signed up"} successfully! (Simulation)`);
-    }, 1200);
+    setError(null);
+    setSuccess(null);
+    const action = mode === "signin" ? signin : signup;
+
+    action(trimmedEmail, password)
+      .then(({ user }) => {
+        storeUser(user);
+        setSuccess(mode === "signin" ? "Signed in successfully" : "Account created successfully");
+        router.push("/dashboard");
+      })
+      .catch((err: Error) => {
+        setError(err.message || "Unable to complete request");
+      })
+      .finally(() => setLoading(false));
   };
 
   return (
@@ -58,6 +87,16 @@ const AuthPage = ({ initialMode = "signin" }: AuthPageProps) => {
         </div>
 
         <div className="glass-morphism p-8 rounded-2xl border border-slate-800 shadow-2xl">
+          {error && (
+            <div className="mb-4 rounded-lg border border-rose-500/40 bg-rose-500/10 px-4 py-3 text-rose-100">
+              {error}
+            </div>
+          )}
+          {success && (
+            <div className="mb-4 rounded-lg border border-emerald-500/40 bg-emerald-500/10 px-4 py-3 text-emerald-100">
+              {success}
+            </div>
+          )}
           <form onSubmit={handleSubmit} className="space-y-6">
             {mode === "signup" && (
               <div>

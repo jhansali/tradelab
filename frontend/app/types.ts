@@ -21,3 +21,14 @@ export interface MarketInsight {
   keyDrivers: string[];
   riskLevel: RiskLevel;
 }
+
+export interface User {
+  id: number;
+  email: string;
+  created_at: string;
+}
+
+export interface AuthResponse {
+  message: string;
+  user: User;
+}

@@ -20,3 +20,9 @@ def get_sessionmaker() -> async_sessionmaker[AsyncSession]:
     if _session_maker is None:
         _session_maker = async_sessionmaker(bind=get_engine(), expire_on_commit=False)
     return _session_maker
+
+
+async def get_session() -> AsyncSession:
+    sessionmaker = get_sessionmaker()
+    async with sessionmaker() as session:
+        yield session
