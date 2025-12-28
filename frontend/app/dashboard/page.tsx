@@ -4,9 +4,9 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
-import { clearUser, loadUser } from "../components/auth/storage";
 import type { MarketOverviewStats, StockSymbol, User } from "../types";
 import { HealthStatus } from "../types";
+import { fetchMe } from "../lib/api";
 
 const INITIAL_WATCHLIST: StockSymbol[] = [
   { symbol: "AAPL", name: "Apple Inc.", price: 178.44, change: 1.25, changePercent: 0.71, lastUpdated: "14:25:01" },
@@ -496,16 +496,16 @@ const Dashboard = ({ user }: { user: User }) => {
 export default function DashboardPage() {
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const saved = loadUser();
-    if (!saved) {
-      router.push("/signin");
-      return;
-    }
-    setUser(saved);
+    fetchMe()
+      .then((u) => setUser(u))
+      .catch(() => router.push("/signin"))
+      .finally(() => setLoading(false));
   }, [router]);
 
+  if (loading) return null;
   if (!user) return null;
 
   return <Dashboard user={user} />;

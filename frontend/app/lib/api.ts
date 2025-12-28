@@ -1,4 +1,4 @@
-import type { AuthResponse } from "../types";
+import type { AuthResponse, User } from "../types";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";
 
@@ -9,6 +9,7 @@ async function apiRequest<T>(path: string, options: RequestInit): Promise<T> {
       "Content-Type": "application/json",
       ...(options.headers || {}),
     },
+    credentials: "include",
   });
 
   if (!res.ok) {
@@ -32,4 +33,12 @@ export async function signin(email: string, password: string): Promise<AuthRespo
     method: "POST",
     body: JSON.stringify({ email, password }),
   });
+}
+
+export async function fetchMe(): Promise<AuthResponse["user"]> {
+  return apiRequest<User>("/auth/me", { method: "GET" });
+}
+
+export async function logout(): Promise<void> {
+  await apiRequest<void>("/auth/logout", { method: "POST" });
 }

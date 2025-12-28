@@ -9,3 +9,6 @@ URLs
 - http://localhost:8000
 - http://localhost:8000/docs
 - http://localhost:8000/health
+
+Auth
+- Backend issues JWT cookies for signup/signin; use strong secrets and HTTPS-only cookies for production.

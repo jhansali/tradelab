@@ -7,6 +7,10 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     database_url: str = Field(..., alias="DATABASE_URL")
     cors_origins: Union[str, List[str]] = Field(default_factory=list, alias="CORS_ORIGINS")
+    secret_key: str = Field("changeme", alias="SECRET_KEY")
+    access_token_expire_minutes: int = Field(30, alias="ACCESS_TOKEN_EXPIRE_MINUTES")
+    refresh_token_expire_minutes: int = Field(60 * 24 * 7, alias="REFRESH_TOKEN_EXPIRE_MINUTES")
+    algorithm: str = Field("HS256", alias="ALGORITHM")
 
     model_config = SettingsConfigDict(env_file=".env", env_prefix="", extra="ignore")
 

@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 
-import { signin, signup } from "../../lib/api";
+import { fetchMe, signin, signup } from "../../lib/api";
 import type { AuthMode } from "./types";
 import { loadUser, storeUser } from "./storage";
 
@@ -28,8 +28,9 @@ const AuthPage = ({ initialMode = "signin" }: AuthPageProps) => {
 
   // If already signed in, go straight to dashboard.
   useEffect(() => {
-    const existing = loadUser();
-    if (existing) router.replace("/dashboard");
+    fetchMe()
+      .then(() => router.replace("/dashboard"))
+      .catch(() => null);
   }, [router]);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -49,8 +50,7 @@ const AuthPage = ({ initialMode = "signin" }: AuthPageProps) => {
     const action = mode === "signin" ? signin : signup;
 
     action(trimmedEmail, password, fullName)
-      .then(({ user }) => {
-        storeUser(user);
+      .then(() => {
         setSuccess(mode === "signin" ? "Signed in successfully" : "Account created successfully");
         router.push("/dashboard");
       })
