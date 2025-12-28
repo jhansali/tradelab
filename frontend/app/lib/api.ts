@@ -20,10 +20,10 @@ async function apiRequest<T>(path: string, options: RequestInit): Promise<T> {
   return (await res.json()) as T;
 }
 
-export async function signup(email: string, password: string): Promise<AuthResponse> {
+export async function signup(email: string, password: string, full_name?: string | null): Promise<AuthResponse> {
   return apiRequest<AuthResponse>("/auth/signup", {
     method: "POST",
-    body: JSON.stringify({ email, password }),
+    body: JSON.stringify({ email, password, full_name }),
   });
 }
 

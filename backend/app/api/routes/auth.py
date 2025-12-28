@@ -17,7 +17,7 @@ async def signup(payload: UserCreate, session: AsyncSession = Depends(get_sessio
     if existing:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="User already exists")
 
-    user = User(email=normalized_email, hashed_password=hash_password(payload.password))
+    user = User(email=normalized_email, hashed_password=hash_password(payload.password), full_name=payload.full_name)
     session.add(user)
     await session.commit()
     await session.refresh(user)

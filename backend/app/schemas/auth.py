@@ -18,6 +18,7 @@ class _PasswordModel(BaseModel):
 
 class UserCreate(_PasswordModel):
     email: EmailStr
+    full_name: str | None = None
 
     @field_validator("email")
     @classmethod
@@ -38,6 +39,7 @@ class UserOut(BaseModel):
     id: int
     email: EmailStr
     created_at: datetime
+    full_name: str | None = None
 
     class Config:
         from_attributes = True

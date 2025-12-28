@@ -26,9 +26,32 @@ export interface User {
   id: number;
   email: string;
   created_at: string;
+  full_name?: string | null;
 }
 
 export interface AuthResponse {
   message: string;
   user: User;
+}
+
+export interface StockSymbol {
+  symbol: string;
+  name: string;
+  price: number;
+  change: number;
+  changePercent: number;
+  lastUpdated: string;
+}
+
+export enum HealthStatus {
+  OK = "OK",
+  DOWN = "DOWN",
+  LOADING = "LOADING",
+}
+
+export interface MarketOverviewStats {
+  symbolsTracked: number;
+  biggestGainer: string;
+  biggestLoser: string;
+  mostActive: string;
 }

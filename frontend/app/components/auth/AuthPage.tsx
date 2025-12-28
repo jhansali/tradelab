@@ -48,7 +48,7 @@ const AuthPage = ({ initialMode = "signin" }: AuthPageProps) => {
     setSuccess(null);
     const action = mode === "signin" ? signin : signup;
 
-    action(trimmedEmail, password)
+    action(trimmedEmail, password, fullName)
       .then(({ user }) => {
         storeUser(user);
         setSuccess(mode === "signin" ? "Signed in successfully" : "Account created successfully");
