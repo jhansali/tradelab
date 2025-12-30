@@ -10,5 +10,8 @@ URLs
 - http://localhost:8000/docs
 - http://localhost:8000/health
 
+Services
+- Postgres, Redis, backend (FastAPI), frontend (Next.js). Market data proxied via backend (Alpaca) with Redis caching.
+
 Auth
 - Backend issues JWT cookies for signup/signin; use strong secrets and HTTPS-only cookies for production.

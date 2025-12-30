@@ -20,12 +20,15 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+      redis:
+        condition: service_started
     env_file:
       - .env
     ports:
       - "${BACKEND_PORT:-8000}:8000"
     networks:
       - tradelab
+    restart: unless-stopped
 
   frontend:
     build: ./frontend
@@ -35,6 +38,12 @@ services:
       - .env
     ports:
       - "${FRONTEND_PORT:-3000}:3000"
+    networks:
+      - tradelab
+
+  redis:
+    image: redis:7
+    restart: unless-stopped
     networks:
       - tradelab
 

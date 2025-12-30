@@ -1,6 +1,5 @@
-from fastapi import Depends, HTTPException, status
+from fastapi import Depends, HTTPException, Request, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
-from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.security import decode_token
@@ -8,6 +7,8 @@ from app.db.session import get_session
 from app.models import User
 
 bearer_scheme = HTTPBearer(auto_error=False)
+
+ACCESS_COOKIE_NAME = "access_token"
 
 
 async def get_current_user(
@@ -21,10 +22,22 @@ async def get_current_user(
 
 
 async def get_current_user_from_cookie(
-    session: AsyncSession = Depends(get_session),
+    request: Request, session: AsyncSession = Depends(get_session)
 ) -> User:
-    # Cookie is parsed in router; dependency kept for symmetry.
-    raise NotImplementedError
+    token = request.cookies.get(ACCESS_COOKIE_NAME)
+    return await _resolve_user_from_token(token, session)
+
+
+async def get_user_id_optional(request: Request, session: AsyncSession = Depends(get_session)) -> int:
+    """
+    Attempt to read user id from access token cookie; fall back to 1 if not authenticated.
+    """
+    token = request.cookies.get(ACCESS_COOKIE_NAME)
+    try:
+        user = await _resolve_user_from_token(token, session)
+        return user.id
+    except HTTPException:
+        return 1
 
 
 async def _resolve_user_from_token(token: str | None, session: AsyncSession) -> User:

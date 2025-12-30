@@ -1,4 +1,11 @@
-import type { AuthResponse, User } from "../types";
+import type {
+  AuthResponse,
+  ChartResponse,
+  MarketSearchResponse,
+  QuotesResponse,
+  User,
+  WatchlistResponse,
+} from "../types";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";
 
@@ -41,4 +48,37 @@ export async function fetchMe(): Promise<AuthResponse["user"]> {
 
 export async function logout(): Promise<void> {
   await apiRequest<void>("/auth/logout", { method: "POST" });
+}
+
+export async function fetchWatchlist(): Promise<WatchlistResponse> {
+  return apiRequest<WatchlistResponse>("/api/watchlist", { method: "GET" });
+}
+
+export async function addWatchlistSymbol(symbol: string): Promise<WatchlistResponse> {
+  return apiRequest<WatchlistResponse>("/api/watchlist", {
+    method: "POST",
+    body: JSON.stringify({ symbol }),
+  });
+}
+
+export async function removeWatchlistSymbol(symbol: string): Promise<WatchlistResponse> {
+  return apiRequest<WatchlistResponse>(`/api/watchlist/${encodeURIComponent(symbol)}`, { method: "DELETE" });
+}
+
+export async function clearWatchlist(): Promise<WatchlistResponse> {
+  return apiRequest<WatchlistResponse>("/api/watchlist", { method: "DELETE" });
+}
+
+export async function searchSymbols(query: string): Promise<MarketSearchResponse> {
+  const url = `/api/market/search?q=${encodeURIComponent(query)}`;
+  return apiRequest<MarketSearchResponse>(url, { method: "GET" });
+}
+
+export async function fetchQuotes(symbols: string[]): Promise<QuotesResponse> {
+  const param = symbols.join(",");
+  return apiRequest<QuotesResponse>(`/api/market/quotes?symbols=${encodeURIComponent(param)}`, { method: "GET" });
+}
+
+export async function fetchChart(symbol: string): Promise<ChartResponse> {
+  return apiRequest<ChartResponse>(`/api/market/chart?symbol=${encodeURIComponent(symbol)}`, { method: "GET" });
 }

@@ -5,7 +5,6 @@ import { useEffect, useMemo, useState } from "react";
 
 import { fetchMe, signin, signup } from "../../lib/api";
 import type { AuthMode } from "./types";
-import { loadUser, storeUser } from "./storage";
 
 interface AuthPageProps {
   initialMode?: AuthMode;
